@@ -4,12 +4,15 @@ set -e
 # Démarrer PostgreSQL en mode foreground
 DATA_DIR="/var/lib/postgresql/data"
 
-
 echo "Démarrage de PostgreSQL..."
-if [ -d "$DATA_DIR" ] && [ -z "$(ls -A "$DATA_DIR")" ]; then
-    su - postgres -c "/usr/lib/postgresql/14/bin/initdb -E UTF8 -D /var/lib/postgresql/data"
-    su - postgres -c "/usr/lib/postgresql/14/bin/pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/data/logfile start"
+if [ ! -s "$DATA_DIR/PG_VERSION" ]; then
+    echo "Initialisation du cluster PostgreSQL..."
+    su - postgres -c "/usr/lib/postgresql/14/bin/initdb -E UTF8 -D $DATA_DIR"
+    su - postgres -c "/usr/lib/postgresql/14/bin/pg_ctl -D $DATA_DIR -l $DATA_DIR/logfile start"
     su - postgres -c "createuser -d -R -S odoo"
+else
+    echo "Cluster PostgreSQL déjà initialisé, lancement..."
+    su - postgres -c "/usr/lib/postgresql/14/bin/pg_ctl -D $DATA_DIR -l $DATA_DIR/logfile start"
 fi
 
 # Démarrer PostgreSQL
