@@ -7,6 +7,10 @@ RUN useradd -m -d /home/odoo -s /bin/bash odoo \
     && echo "odoo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN mkdir -p /var/lib/postgresql/data && chown -R postgres:postgres /var/lib/postgresql
+
+# 🔑 Ajout du volume pour persistance
+VOLUME ["/var/lib/postgresql/data"]
+
 COPY ./entrypoint.sh /
 COPY config.yaml /home/odoo/.config/code-server/config.yaml
 
@@ -25,5 +29,6 @@ RUN mkdir -p /mnt/extra-addons && chown -R odoo /mnt/extra-addons
 VOLUME ["/home/odoo/src/custo"]
 
 RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 
 ENTRYPOINT ["/entrypoint.sh"]
