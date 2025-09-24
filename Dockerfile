@@ -1,7 +1,7 @@
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 # install latest postgresql-client
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql postgresql-contrib postgresql-client git python3-pip libldap2-dev libpq-dev libsasl2-dev curl htop vim
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql postgresql-contrib postgresql-client python3-pip git libldap2-dev libpq-dev libsasl2-dev curl htop vim
 
 RUN useradd -m -d /home/odoo -s /bin/bash odoo \
     && echo "odoo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -18,8 +18,8 @@ USER postgres
 
 USER odoo
 RUN mkdir -p /home/odoo/src/custo
-RUN  git clone https://github.com/odoo/odoo.git /home/odoo/src/odoo --depth 1 --branch 17.0
-RUN pip3 install -r /home/odoo/src/odoo/requirements.txt
+RUN git clone https://github.com/odoo/odoo.git /home/odoo/src/odoo --depth 1 --branch 19.0
+RUN pip install -r /home/odoo/src/odoo/requirements.txt
 
 EXPOSE 5432 8069 8080
 USER root
