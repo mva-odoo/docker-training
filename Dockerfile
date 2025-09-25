@@ -19,7 +19,7 @@ USER postgres
 USER odoo
 RUN mkdir -p /home/odoo/src/custo
 RUN git clone https://github.com/odoo/odoo.git /home/odoo/src/odoo --depth 1 --branch 19.0
-RUN pip install -r /home/odoo/src/odoo/requirements.txt
+RUN pip install -r /home/odoo/src/odoo/requirements.txt --break-system-packages
 
 EXPOSE 5432 8069 8080
 USER root
